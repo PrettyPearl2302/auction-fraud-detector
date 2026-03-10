@@ -304,21 +304,21 @@ def normalize_probability(prob):
     return max(0, min(100, round(prob * 100)))
 
 def get_risk_bucket(prob_percent):
-    if prob_percent >= 70:
+    if prob_percent >= 60:
         return "high"
-    elif prob_percent >= 35:
+    elif prob_percent >= 25:
         return "mid"
     return "low"
 
 def get_insight_text(prob_percent):
-    if prob_percent >= 70:
+    if prob_percent >= 60:
         return """
         The current bidder profile demonstrates a significant alignment with established shill bidding patterns.
         The high <span class="blue">Successive Outbidding</span> score, combined with an anomalous
-        <span class="blue">Bidder Tendency</span>, suggests a non-competitive behavior aimed at price inflation
+        <span class="blue">Bidder Tendency</span>, suggests non-competitive behavior aimed at price inflation
         rather than item acquisition. We recommend manual audit or account restriction.
         """
-    elif prob_percent >= 35:
+    elif prob_percent >= 25:
         return """
         The current bidder profile shows several <span class="yellow">suspicious early-stage indicators</span>.
         While the pattern is not conclusively fraudulent, this behavior departs from typical organic bidding activity.
@@ -440,6 +440,8 @@ with left_col:
             input_data = input_data[feature_names]
             fraud_probability = model.predict_proba(input_data)[0][1]
             st.session_state.fraud_percent = normalize_probability(fraud_probability)
+            st.write("Fraud probability:", fraud_probability)
+            st.write("Fraud percent:", st.session_state.fraud_percent)
 
     st.markdown('</div>', unsafe_allow_html=True)
 
